@@ -20,7 +20,7 @@ def get_version():
 setup(
     name='kmatch',
     version=get_version(),
-    description='A small language for matching/validating/filtering Python dictionaries',
+    description='A language for matching/validating/filtering Python dictionaries',
     long_description=open('README.rst').read(),
     url='https://github.com/ambitioninc/kmatch',
     author='Wes Kendall',
@@ -28,14 +28,21 @@ setup(
     keywords='matching, dictionaries, filtering, validation',
     packages=find_packages(),
     classifiers=[
-        'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
-        'Framework :: Django',
+    ],
+    license='MIT',
+    install_requires=[],
+    include_package_data=True,
+    test_suite='nose.collector',
+    tests_require=[
+        'nose>=1.3.0',
+        'coverage>=3.7.1',
+        'mock>=1.0.1',
     ],
     license='MIT',
     install_requires=[

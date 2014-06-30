@@ -3,16 +3,9 @@ python:
   - '2.7'
   - '3.2'
   - '3.3'
-env:
-  global:
-    - DB=postgres
-  matrix:
-    - DJANGO=1.6.5
 install:
-  - pip install -q coverage flake8 Django==$DJANGO
-before_script:
-  - psql -c 'CREATE DATABASE kmatch;' -U postgres
+  - pip install flake8 nose>=1.3.0
+  - python setup.py install
 script:
   - flake8 .
-  - coverage run setup.py test
-  - coverage report
+  - python setup.py nosetests

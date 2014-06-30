@@ -5,20 +5,20 @@ Contributions and issues are most welcome! All issues and pull requests are
 handled through github on the `ambitioninc repository`_. Please check for any
 existing issues before filing a new one!
 
-.. _ambitioninc repository: https://github.com/ambitioninc/kmatch
+.. _ambitioninc repository: https://github.com/ambitioninc/{{ repo_name }}
 
 Running the tests
 -----------------
 
 To get the source source code and run the unit tests, run::
 
-    $ git clone git://github.com/ambitioninc/kmatch.git
-    $ cd kmatch
+    $ git clone git://github.com/ambitioninc/{{ repo_name }}.git
+    $ cd {{ repo_name }}
     $ virtualenv env
     $ . env/bin/activate
+    $ pip install nose
     $ python setup.py install
-    $ coverage run setup.py test
-    $ coverage report
+    $ python setup.py nosetests
 
 While 100% code coverage does not make a library bug-free, it significantly
 reduces the number of easily caught bugs! Please make sure coverage is at 100%
@@ -43,10 +43,9 @@ Please arrange imports with the following style
 
     # Third party package imports
     from mock import patch
-    from django.conf import settings
 
     # Local package imports
-    from kmatch.version import __version__
+    from {{ project_name }}.version import __version__
 
 Please follow `Google's python style`_ guide wherever possible.
 
@@ -58,7 +57,7 @@ Building the docs
 When in the project directory::
 
     $ pip install -r requirements/docs.txt
-    $ pip uninstall -y kmatch && python setup.py install
+    $ pip uninstall -y {{ repo_name }} && python setup.py install
     $ cd docs && make html
     $ open docs/_build/html/index.html
 
@@ -67,10 +66,11 @@ Release Checklist
 
 Before a new release, please go through the following checklist:
 
-* Bump version in kmatch/version.py
+* Bump version in {{ project_name }}/version.py
 * Git tag the version
 * Add a release note in docs/release_notes/
-* Add the newest release note to docs/release_notes/index.rst
+* Add a link to the newest release note to docs/release_notes/index.rst
+* Upload to pypi
 
 Vulnerability Reporting
 -----------------------
