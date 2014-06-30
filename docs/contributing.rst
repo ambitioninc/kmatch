@@ -43,6 +43,10 @@ Please arrange imports with the following style
 
     # Third party package imports
     from mock import patch
+<<<<<<< HEAD
+=======
+    from django.conf import settings
+>>>>>>> 12b8a28dffe42bb74b96038e4d99c2a797c411c1
 
     # Local package imports
     from kmatch.version import __version__
@@ -69,8 +73,12 @@ Before a new release, please go through the following checklist:
 * Bump version in kmatch/version.py
 * Git tag the version
 * Add a release note in docs/release_notes/
+<<<<<<< HEAD
 * Add a link to the newest release note to docs/release_notes/index.rst
 * Upload to pypi
+=======
+* Add the newest release note to docs/release_notes/index.rst
+>>>>>>> 12b8a28dffe42bb74b96038e4d99c2a797c411c1
 
 Vulnerability Reporting
 -----------------------
