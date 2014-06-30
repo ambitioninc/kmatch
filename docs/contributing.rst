@@ -5,15 +5,15 @@ Contributions and issues are most welcome! All issues and pull requests are
 handled through github on the `ambitioninc repository`_. Please check for any
 existing issues before filing a new one!
 
-.. _ambitioninc repository: https://github.com/ambitioninc/kmatch
+.. _ambitioninc repository: https://github.com/ambitioninc/{{ repo_name }}
 
 Running the tests
 -----------------
 
 To get the source source code and run the unit tests, run::
 
-    $ git clone git://github.com/ambitioninc/kmatch.git
-    $ cd kmatch
+    $ git clone git://github.com/ambitioninc/{{ repo_name }}.git
+    $ cd {{ repo_name }}
     $ virtualenv env
     $ . env/bin/activate
     $ pip install nose
@@ -43,13 +43,9 @@ Please arrange imports with the following style
 
     # Third party package imports
     from mock import patch
-<<<<<<< HEAD
-=======
-    from django.conf import settings
->>>>>>> 12b8a28dffe42bb74b96038e4d99c2a797c411c1
 
     # Local package imports
-    from kmatch.version import __version__
+    from {{ project_name }}.version import __version__
 
 Please follow `Google's python style`_ guide wherever possible.
 
@@ -61,7 +57,7 @@ Building the docs
 When in the project directory::
 
     $ pip install -r requirements/docs.txt
-    $ pip uninstall -y kmatch && python setup.py install
+    $ pip uninstall -y {{ repo_name }} && python setup.py install
     $ cd docs && make html
     $ open docs/_build/html/index.html
 
@@ -70,15 +66,11 @@ Release Checklist
 
 Before a new release, please go through the following checklist:
 
-* Bump version in kmatch/version.py
+* Bump version in {{ project_name }}/version.py
 * Git tag the version
 * Add a release note in docs/release_notes/
-<<<<<<< HEAD
 * Add a link to the newest release note to docs/release_notes/index.rst
 * Upload to pypi
-=======
-* Add the newest release note to docs/release_notes/index.rst
->>>>>>> 12b8a28dffe42bb74b96038e4d99c2a797c411c1
 
 Vulnerability Reporting
 -----------------------
