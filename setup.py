@@ -44,18 +44,5 @@ setup(
         'coverage>=3.7.1',
         'mock>=1.0.1',
     ],
-    license='MIT',
-    install_requires=[
-        'django>=1.6',
-    ],
-    tests_require=[
-        'psycopg2',
-        'django-nose',
-        'south',
-        'mock>=1.0.1',
-        'coverage>=3.7.1',
-    ],
-    test_suite='run_tests.run_tests',
-    include_package_data=True,
     zip_safe=False,
 )
