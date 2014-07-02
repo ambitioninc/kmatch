@@ -1,42 +1,35 @@
-kmatch Documentation
-=============================
+kmatch: A language for matching Python dictionaries
+===================================================
+Kmatch is a language for matching Python dictionaries. Patterns are specified as lists of filters combined with logical operators.
+
+A quick example of kmatch is below.
+
+.. code-block:: python
+
+    from kmatch import KMatch
+
+    k = KMatch(['k', '>=', 10])
+    print k.match({'k': 9})
+    False
+
+    print k.match({'k': 10})
+    True
+
+More powerful expressions can be made to match more types of patterns.
+
+.. code-block:: python
+
+    from kmatch import KMatch
+
+    k = KMatch(['&',
+        ['k1', '=~', '.*Hello.*'],
+        ['k2', '!=', False]
+    ])
+
+    # Match all a dictionary whose 'k1' key has a pattern of '.*Hello.*' and whose 'k2' key is not False
+    k.match(...)
 
 
-.. toctree::
-   :maxdepth: 1
+Kmatch can be used for a wide variety of applications. One example is filtering a list of dictionaries that match a pattern. Another example is to validate dictionaries passed to a function.
 
-   ref/kmatch
-   contributing
-
-.. toctree::
-   :maxdepth: 2
-
-   release_notes/index
-
-Installation
-============
-
-To install the latest release, type::
-
-    pip install kmatch
-
-To install the latest code directly from source, type::
-
-    pip install git+git://github.com/ambitioninc/kmatch.git
-
-Configuration
-=============
-
-
-
-Release Notes
-=============
-
-.. toctree::
-
-   release_notes/v0.1
-
-Contributing
-============
-
-Please see :doc:`Contributing <contributing>`
+Installation, overview of the language, usage examples, and code documentation are overviewed in the following.

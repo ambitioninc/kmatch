@@ -5,8 +5,12 @@ Table of Contents
    :maxdepth: 2
 
    index
+   installation
+   language_overview
+   usage_examples
    ref/kmatch
    contributing
+   release_notes/index
 
 Indices and tables
 ==================

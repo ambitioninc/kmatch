@@ -5,30 +5,15 @@ import re
 
 class KMatch(object):
     """
-    Implements the KMatch language. Takes a dictionary specifying the pattern, compiles it / validates
-    it, and allows the user to call the match function.
-
-    An example of a pattern is below:
-
-    pattern = [
-        '&', [
-            ['isDeleted', '==', False],
-            '|': [
-                ['Subject', '=~', '.*Call.*'],
-                ['Call_Date', '!=', None],
-            ]
-        ]]
-    ]
-
-    This pattern will match any dictionary that has isDeleted equal to False and the Subject has the word "Call" in it
-    or the Call_Date field is not None.
+    Implements the KMatch language. Takes a dictionary specifying the pattern, compiles it, validates
+    it, and provides the user with the match function.
     """
-    operator_map = {
+    _OPERATOR_MAP = {
         '&': all,
         '|': any,
         '^': not_,
     }
-    filter_map = {
+    _FILTER_MAP = {
         '==': eq,
         '!=': ne,
         '<': lambda value, filter_value: lt(value, filter_value) if value is not None else False,
@@ -40,7 +25,11 @@ class KMatch(object):
 
     def __init__(self, p):
         """
-        Set the pattern p, compile its regexs, and perform validation.
+        Sets the pattern, compiles its regexs (if it has any), and performs validation on the pattern.
+
+        :param p: The kmatch pattern
+        :type p: dict
+        :raises: ValueError on an invalid pattern or regex
         """
         self._pattern = deepcopy(p)
 
@@ -51,10 +40,10 @@ class KMatch(object):
         self._compile(self._pattern)
 
     def _is_operator(self, p):
-        return len(p) == 2 and p[0] in self.operator_map and isinstance(p[1], (list, tuple))
+        return len(p) == 2 and p[0] in self._OPERATOR_MAP and isinstance(p[1], (list, tuple))
 
     def _is_filter(self, p):
-        return len(p) == 3 and p[1] in self.filter_map
+        return len(p) == 3 and p[1] in self._FILTER_MAP
 
     def _compile(self, p):
         """
@@ -94,18 +83,22 @@ class KMatch(object):
         Returns True or False if the operator (&, |, or ^ with filters) matches the value dictionary.
         """
         if p[0] == '^':
-            return self.operator_map[p[0]](self._match(p[1], value))
+            return self._OPERATOR_MAP[p[0]](self._match(p[1], value))
         else:
-            return self.operator_map[p[0]]([self._match(operator_or_filter, value) for operator_or_filter in p[1]])
+            return self._OPERATOR_MAP[p[0]]([self._match(operator_or_filter, value) for operator_or_filter in p[1]])
 
     def _match_filter(self, p, value):
         """
         Returns True of False if value matches the filter.
         """
-        return self.filter_map[p[1]](value.get(p[0]), p[2])
+        return self._FILTER_MAP[p[1]](value.get(p[0]), p[2])
 
     def match(self, value):
         """
-        Matches a value dict to the pattern.
+        Matches the value to the pattern
+
+        :param value: The value to be matched
+        :type value: dict
+        :returns: True if the value matches the pattern, False otherwise
         """
         return self._match(self._pattern, value)
