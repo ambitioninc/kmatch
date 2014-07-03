@@ -61,7 +61,7 @@ class KMatchMatchTest(TestCase):
 
     def test_not_field_true(self):
         self.assertTrue(KMatch([
-            '^', ['>=', 'f', 3],
+            '!', ['>=', 'f', 3],
         ]).match({'f': 1}))
 
     def test_compound_and_lte_gte_single_field_true(self):
@@ -141,7 +141,7 @@ class KMatchMatchTest(TestCase):
                     ['=~', 'f1', '^Email$'],
                     ['=~', 'f1', '^Call$'],
                 ]],
-                ['^', ['>=', 'f2', 3]],
+                ['!', ['>=', 'f2', 3]],
             ]
         ]).match({'f1': 'Call', 'f2': 4}))
 
@@ -203,9 +203,9 @@ class KMatchInitTest(TestCase):
 
     @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
     def test_nested_list_of_single_dict(self, mock_compile):
-        k = KMatch(['^', ['=~', 'field', 'hi']])
+        k = KMatch(['!', ['=~', 'field', 'hi']])
         self.assertEquals(mock_compile.call_count, 1)
-        self.assertEquals(k._pattern, ['^', ['=~', 'field', 'hi_compiled']])
+        self.assertEquals(k._pattern, ['!', ['=~', 'field', 'hi_compiled']])
 
     @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
     def test_nested_list_of_lists(self, mock_compile):

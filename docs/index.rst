@@ -1,6 +1,6 @@
 kmatch: A language for matching Python dictionaries
 ===================================================
-Kmatch is a language for matching Python dictionaries. Patterns are specified as lists of filters combined with logical operators.
+The kmatch app is a language/implementation for matching Python dictionaries. Patterns are specified as lists of filters combined with logical operators.
 
 A quick example of kmatch is below.
 
@@ -30,6 +30,6 @@ More powerful expressions can be made to match more types of patterns.
     k.match(...)
 
 
-Kmatch can be used for a wide variety of applications. One example is filtering a list of dictionaries that match a pattern. Another example is to validate dictionaries passed to a function.
+The kmatch app can be used for a wide variety of applications. One example is filtering a list of dictionaries that match a pattern. Another example is to validate dictionaries passed to a function.
 
 Installation, overview of the language, usage examples, and code documentation are overviewed in the following.

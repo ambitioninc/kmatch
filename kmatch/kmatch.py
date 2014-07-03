@@ -11,7 +11,7 @@ class KMatch(object):
     _OPERATOR_MAP = {
         '&': all,
         '|': any,
-        '^': not_,
+        '!': not_,
     }
     _FILTER_MAP = {
         '==': eq,
@@ -56,7 +56,7 @@ class KMatch(object):
                 except:  # Python doesn't document exactly what exceptions re.compile throws
                     raise ValueError('Bad regex - {0}'.format(p[2]))
         else:
-            for operator_or_filter in (p[1] if p[0] != '^' else [p[1]]):
+            for operator_or_filter in (p[1] if p[0] != '!' else [p[1]]):
                 self._compile(operator_or_filter)
 
     def _validate(self, p):
@@ -64,7 +64,7 @@ class KMatch(object):
         Recursively validates the pattern (p), ensuring it adheres to the proper key names and structure.
         """
         if self._is_operator(p):
-            for operator_or_filter in (p[1] if p[0] != '^' else [p[1]]):
+            for operator_or_filter in (p[1] if p[0] != '!' else [p[1]]):
                 self._validate(operator_or_filter)
         elif not self._is_filter(p):
             raise ValueError('Not a valid operator or filter - {0}'.format(p))
@@ -80,9 +80,9 @@ class KMatch(object):
 
     def _match_operator(self, p, value):
         """
-        Returns True or False if the operator (&, |, or ^ with filters) matches the value dictionary.
+        Returns True or False if the operator (&, |, or ! with filters) matches the value dictionary.
         """
-        if p[0] == '^':
+        if p[0] == '!':
             return self._OPERATOR_MAP[p[0]](self._match(p[1], value))
         else:
             return self._OPERATOR_MAP[p[0]]([self._match(operator_or_filter, value) for operator_or_filter in p[1]])
