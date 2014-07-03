@@ -15,10 +15,12 @@ class KMatchTest(TestCase):
         self.assertFalse(K(['<=', 'f', 0]).match({'f': 1}))
 
     def test_basic_lte_non_extant(self):
-        self.assertFalse(K(['<=', 'f', 0]).match({}))
+        with self.assertRaises(KeyError):
+            self.assertFalse(K(['<=', 'f', 0]).match({}))
 
     def test_basic_lt_non_extant(self):
-        self.assertFalse(K(['<', 'f', 0]).match({}))
+        with self.assertRaises(KeyError):
+            self.assertFalse(K(['<', 'f', 0]).match({}))
 
     def test_basic_eq_true(self):
         self.assertTrue(K(['==', 'f', 0]).match({'f': 0}))
@@ -27,7 +29,8 @@ class KMatchTest(TestCase):
         self.assertFalse(K(['==', 'f', 0]).match({'f': 1}))
 
     def test_basic_eq_non_extant(self):
-        self.assertFalse(K(['==', 'f', 0]).match({}))
+        with self.assertRaises(KeyError):
+            self.assertFalse(K(['==', 'f', 0]).match({}))
 
     def test_basic_gte_true(self):
         self.assertTrue(K(['>=', 'f', 0]).match({'f': 0}))
@@ -36,10 +39,12 @@ class KMatchTest(TestCase):
         self.assertFalse(K(['>=', 'f', 0]).match({'f': -1}))
 
     def test_basic_gte_non_extant(self):
-        self.assertFalse(K(['>=', 'f', 0]).match({}))
+        with self.assertRaises(KeyError):
+            self.assertFalse(K(['>=', 'f', 0]).match({}))
 
     def test_basic_gt_non_extant(self):
-        self.assertFalse(K(['>', 'f', 0]).match({}))
+        with self.assertRaises(KeyError):
+            self.assertFalse(K(['>', 'f', 0]).match({}))
 
     def test_basic_regex_true(self):
         self.assertTrue(K(['=~', 'f', '^hi$']).match({'f': 'hi'}))
@@ -48,21 +53,52 @@ class KMatchTest(TestCase):
         self.assertFalse(K(['=~', 'f', '^hi$']).match({'f': ' hi'}))
 
     def test_basic_regex_non_extant(self):
-        self.assertFalse(K(['=~', 'f', '^hi$']).match({}))
+        with self.assertRaises(KeyError):
+            self.assertFalse(K(['=~', 'f', '^hi$']).match({}))
 
-    def test_basic_no_key_is_none_true(self):
-        self.assertTrue(K(['==', 'f', None]).match({}))
+    def test_basic_equals_non_extant(self):
+        with self.assertRaises(KeyError):
+            self.assertTrue(K(['==', 'f', None]).match({}))
 
-    def test_basic_no_key_is_not_none_false(self):
-        self.assertFalse(K(['!=', 'f', None]).match({}))
+    def test_basic_not_equals_non_extant(self):
+        with self.assertRaises(KeyError):
+            self.assertFalse(K(['!=', 'f', None]).match({}))
 
-    def test_basic_no_key_regex_false(self):
-        self.assertFalse(K(['=~', 'f', 'a']).match({}))
+    def test_basic_existence_true(self):
+        self.assertTrue(K(['?', 'k']).match({'k': 'val'}))
+
+    def test_basic_existence_false(self):
+        self.assertFalse(K(['?', 'k']).match({'k1': 'val'}))
+
+    def test_basic_nonexistence_true(self):
+        self.assertTrue(K(['!?', 'k']).match({'k1': 'val'}))
+
+    def test_basic_nonexistence_false(self):
+        self.assertFalse(K(['!?', 'k']).match({'k': 'val'}))
+
+    def test_basic_suppress_key_errors(self):
+        self.assertFalse(K(['==', 'k', 3], suppress_key_errors=True).match({}))
 
     def test_not_field_true(self):
         self.assertTrue(K([
             '!', ['>=', 'f', 3],
         ]).match({'f': 1}))
+
+    def test_compound_suppress_key_errors_gte_true(self):
+        self.assertTrue(K([
+            '|', [
+                ['==', 'f1', 5],
+                ['>', 'f', 5],
+            ]
+        ], suppress_key_errors=True).match({'f': 6}))
+
+    def test_compound_existence_gte_true(self):
+        self.assertTrue(K([
+            '&', [
+                ['?', 'f'],
+                ['>', 'f', 5],
+            ]
+        ]).match({'f': 6}))
 
     def test_compound_and_lte_gte_single_field_true(self):
         self.assertTrue(K([
@@ -132,7 +168,7 @@ class KMatchTest(TestCase):
                     ['>=', 'f3', 1],
                 ]]
             ]
-        ]).match({'f1': 'Call', 'f3': 2}))
+        ]).match({'f1': 'Call', 'f2': 5, 'f3': 2}))
 
     def test_two_nested_ors_false(self):
         self.assertFalse(K([

@@ -1,14 +1,19 @@
 Language overview
 =================
-K provides a language built around filters that are specified in prefix notation as an array or tuple with 3 values. The filters are then combined by operators in prefix notation.
+The kmatch library provides a language built around filters that are specified in prefix notation. Filters can operate directly on keys or on the values of the keys in the dictionary passed to the ``match`` function. Filters can be combined together by logical operators in prefix notation.
 
-The first value is the filter operator. The second value is the key in the dictionary being matched. The final value is the comparison value. A filter for when 'value' is greater than '3' looks like this:
+
+Value filters
+-------------
+The values referenced by keys in the kmatch pattern can be filtered by using an operator, the key name, and the comparison value. For example:
 
 .. code-block:: python
 
-    ['>', 'value', 3]
+    ['>', 'key_name', 3]
 
-The following are all valid operators:
+The above will return ``True`` when the value of ``key_name`` is greater than 3.
+
+The following are all valid value filter operators:
 
     * ``>`` Performs a greater than filter
     * ``>=`` Performs a greater than or equal to filter
@@ -18,7 +23,21 @@ The following are all valid operators:
     * ``!=`` Performs a not equal to filter
     * ``=~`` Performs a regex match filter
 
-.. note:: There is currently no support for an existence operator. If the key in the dictionary does not exist, the ``==`` and ``!=`` operators will use ``None`` as the key's value. All of the other operators will return ``False``.
+Key filters
+-----------
+Along with filtering on values referenced by keys, the keys themselves can be filtered by using an operator and the key name. For example:
+
+.. code-block:: python
+
+    ['?', 'key_name']
+
+The following are all valid key filter operators:
+
+    * ``?`` Performs an existence filter
+    * ``!?`` Performs a non-existence filter
+
+Logical operations across filters
+---------------------------------
 
 Filters can then be joined together with the following logical operators in prefix notation:
 
@@ -54,6 +73,7 @@ Expressions can be combined as needed to do more complex matching:
             ['<', 'k3', 5],
             ['<', 'k4', 5],
         ]],
+        ['!?', 'k5']
     ]]
 
-The above matches dictionaries that have keys 'k1' and 'k2' greater than 4 or keys 'k3' and 'k4' less than 5.
+The above matches dictionaries that have keys 'k1' and 'k2' greater than 4 or keys 'k3' and 'k4' less than 5 or no keys named 'k5'.

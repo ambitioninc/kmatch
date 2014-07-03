@@ -5,7 +5,7 @@ import re
 
 class K(object):
     """
-    Implements the K language. Takes a dictionary specifying the pattern, compiles it, validates
+    Implements the kmatch language. Takes a dictionary specifying the pattern, compiles it, validates
     it, and provides the user with the match function.
     """
     _OPERATOR_MAP = {
@@ -13,25 +13,32 @@ class K(object):
         '|': any,
         '!': not_,
     }
-    _FILTER_MAP = {
+    _VALUE_FILTER_MAP = {
         '==': eq,
         '!=': ne,
-        '<': lambda value, filter_value: lt(value, filter_value) if value is not None else False,
-        '>': lambda value, filter_value: gt(value, filter_value) if value is not None else False,
-        '<=': lambda value, filter_value: le(value, filter_value) if value is not None else False,
-        '>=': lambda value, filter_value: ge(value, filter_value) if value is not None else False,
-        '=~': lambda match_str, regex: regex.match(match_str) if match_str is not None else False,
+        '<': lt,
+        '>': gt,
+        '<=': le,
+        '>=': ge,
+        '=~': lambda match_str, regex: regex.match(match_str),
+    }
+    _KEY_FILTER_MAP = {
+        '?': lambda key, value: key in value,
+        '!?': lambda key, value: key not in value,
     }
 
-    def __init__(self, p):
+    def __init__(self, p, suppress_key_errors=False):
         """
-        Sets the pattern, compiles its regexs (if it has any), and performs validation on the pattern.
+        Sets the pattern, performs validation on the pattern, and compiles its regexs if it has any.
 
         :param p: The kmatch pattern
         :type p: dict
+        :param suppress_key_errors: Suppress KeyError exceptions and return False instead
+        :type suppress_key_errors: bool
         :raises: ValueError on an invalid pattern or regex
         """
         self._pattern = deepcopy(p)
+        self._suppress_key_errors = suppress_key_errors
 
         # Validate the pattern is in the appropriate format
         self._validate(self._pattern)
@@ -42,20 +49,22 @@ class K(object):
     def _is_operator(self, p):
         return len(p) == 2 and p[0] in self._OPERATOR_MAP and isinstance(p[1], (list, tuple))
 
-    def _is_filter(self, p):
-        return len(p) == 3 and p[0] in self._FILTER_MAP
+    def _is_value_filter(self, p):
+        return len(p) == 3 and p[0] in self._VALUE_FILTER_MAP
+
+    def _is_key_filter(self, p):
+        return len(p) == 2 and p[0] in self._KEY_FILTER_MAP
 
     def _compile(self, p):
         """
         Recursively compiles the regexs in the pattern (p).
         """
-        if self._is_filter(p):
-            if p[0] == '=~':
-                try:
-                    p[2] = re.compile(p[2])
-                except:  # Python doesn't document exactly what exceptions re.compile throws
-                    raise ValueError('Bad regex - {0}'.format(p[2]))
-        else:
+        if self._is_value_filter(p) and p[0] == '=~':
+            try:
+                p[2] = re.compile(p[2])
+            except:  # Python doesn't document exactly what exceptions re.compile throws
+                raise ValueError('Bad regex - {0}'.format(p[2]))
+        elif self._is_operator(p):
             for operator_or_filter in (p[1] if p[0] != '!' else [p[1]]):
                 self._compile(operator_or_filter)
 
@@ -66,7 +75,7 @@ class K(object):
         if self._is_operator(p):
             for operator_or_filter in (p[1] if p[0] != '!' else [p[1]]):
                 self._validate(operator_or_filter)
-        elif not self._is_filter(p):
+        elif not self._is_value_filter(p) and not self._is_key_filter(p):
             raise ValueError('Not a valid operator or filter - {0}'.format(p))
 
     def _match(self, p, value):
@@ -76,7 +85,16 @@ class K(object):
         if self._is_operator(p):
             return self._match_operator(p, value)
         else:
-            return self._match_filter(p, value)
+            try:
+                if self._is_value_filter(p):
+                    return self._match_value_filter(p, value)
+                else:
+                    return self._match_key_filter(p, value)
+            except KeyError:
+                if self._suppress_key_errors:
+                    return False
+                else:
+                    raise KeyError
 
     def _match_operator(self, p, value):
         """
@@ -87,11 +105,17 @@ class K(object):
         else:
             return self._OPERATOR_MAP[p[0]]([self._match(operator_or_filter, value) for operator_or_filter in p[1]])
 
-    def _match_filter(self, p, value):
+    def _match_value_filter(self, p, value):
         """
-        Returns True of False if value matches the filter.
+        Returns True of False if value in the pattern p matches the filter.
         """
-        return self._FILTER_MAP[p[0]](value.get(p[1]), p[2])
+        return self._VALUE_FILTER_MAP[p[0]](value[p[1]], p[2])
+
+    def _match_key_filter(self, p, value):
+        """
+        Returns True of False if key in the pattern p and the value matches the filter.
+        """
+        return self._KEY_FILTER_MAP[p[0]](p[1], value)
 
     def match(self, value):
         """
@@ -100,5 +124,6 @@ class K(object):
         :param value: The value to be matched
         :type value: dict
         :returns: True if the value matches the pattern, False otherwise
+        :raises: KeyError if key from pattern does not exist in input value
         """
         return self._match(self._pattern, value)

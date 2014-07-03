@@ -1,6 +1,6 @@
 kmatch: A language for matching Python dictionaries
 ===================================================
-The kmatch app is a language/implementation for matching Python dictionaries. Patterns are specified as lists of filters combined with logical operators.
+The kmatch library provides a language for matching Python dictionaries. Patterns are specified as lists of filters combined with logical operators.
 
 A quick example of kmatch is below.
 

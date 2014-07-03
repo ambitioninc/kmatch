@@ -3,11 +3,11 @@
 Code documentation
 ==================
 
-KMatch
+K
 ------
 
 .. automodule:: kmatch
-.. autoclass:: kmatch.KMatch
+.. autoclass:: kmatch.K
     :members:
 
     .. automethod:: __init__

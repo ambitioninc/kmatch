@@ -18,9 +18,9 @@ Once imported, simply instantiating the K object performs validation on the patt
     k = K(['>', 'k1', 2])
 
 
-Performing simple filters
--------------------------
-Simple single filters can be used directly when a logical operator is not needed. For example, performing a regex match on a key that has the `@` symbol:
+Performing simple value filters
+-------------------------------
+Simple value filters can be used directly when a logical operator is not needed. For example, performing a regex match on a key that has the '@' symbol:
 
 .. code-block:: python
 
@@ -38,8 +38,27 @@ This also applies to filtering numerical values:
     False
 
 
-More complex filters
---------------------
+Performing simple key filters
+-----------------------------
+Simple key filters can also be done to match dictionaries that have a key named 'k1':
+
+.. code-block:: python
+
+    print K(['?', 'k1']).match({'k1': True})
+    True
+
+The inverse can also be checked:
+
+.. code-block:: python
+
+    print K(['!?', 'k1']).match({'k2': 'value'})
+    True
+
+In the above example, 'k1' does not exist in the matched dictionary, so ``True`` is returned.
+
+
+Performing logical operations across filters
+--------------------------------------------
 Filters can be combined with the ``&`` (``AND``) logical operator for more complex filtering:
 
 .. code-block:: python
@@ -88,16 +107,13 @@ Operators can be combined in various ways to form more complex patterns like so:
     })
     True
 
-A reminder about existence checking
------------------------------------
-Remember that if the keys don't exist, ``None`` is returned as the value in the dictionary. The ``==`` and ``!=`` operators can be used to check for ``None``, however, all other filters will return ``False``. For example:
+Notes about filtering with non-extant keys
+------------------------------------------
+If keys from a kmatch pattern do not exist in the matched dictionary, the default behavior is to throw a ``KeyError`` exception:
 
 .. code-block:: python
 
-    print K(['>', 'k1', 5]).match({})
-    False
-
-    print K('==', 'k1', None).match({})
-    True
-
-.. note:: We are still figuring out how to integrate existence checking in the language so that users will have more power of checking if a key is actually ``None`` or if it doesn't exist. Do a pull request and help us flesh this out!
+    K(['==', 'k1', 5]).match({'k2': 1})
+    Traceback (most recent call last):
+        # Traceback message here ...
+    KeyError: 'k1'
