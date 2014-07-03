@@ -3,9 +3,9 @@ from operator import not_, lt, le, eq, ge, ne, gt
 import re
 
 
-class KMatch(object):
+class K(object):
     """
-    Implements the KMatch language. Takes a dictionary specifying the pattern, compiles it, validates
+    Implements the K language. Takes a dictionary specifying the pattern, compiles it, validates
     it, and provides the user with the match function.
     """
     _OPERATOR_MAP = {

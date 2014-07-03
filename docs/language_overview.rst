@@ -1,12 +1,12 @@
 Language overview
 =================
-KMatch provides a language built around filters that are specified in infix notation as an array or tuple with 3 values. The filters are then combined by operators in prefix notation.
+K provides a language built around filters that are specified in prefix notation as an array or tuple with 3 values. The filters are then combined by operators in prefix notation.
 
-The first value is the key in the dictionary being matched. The second value is the filter operator. The final value is the comparison value. A filter for when 'value' is greater than '3' looks like this:
+The first value is the filter operator. The second value is the key in the dictionary being matched. The final value is the comparison value. A filter for when 'value' is greater than '3' looks like this:
 
 .. code-block:: python
 
-    ['value', '>', 3]
+    ['>', 'value', 3]
 
 The following are all valid operators:
 
@@ -24,22 +24,22 @@ Filters can then be joined together with the following logical operators in pref
 
     * ``&`` Performs a logical ``AND`` on a list of filters
     * ``|`` Performs a logical ``OR`` on a list of filters
-    * ``^`` Performs a logical ``NOT`` on a single filter
+    * ``!`` Performs a logical ``NOT`` on a single filter
 
 The notation for ``AND`` looks like the following:
 
 .. code-block:: python
 
     ['&', [
-        ['k1', '<', 5],
-        ['k2', '==', True],
+        ['<', 'k1', 5],
+        ['==', 'k2', True],
     ]]
 
 The notation for ``OR`` is similar to ``AND``. The ``NOT`` operator works on a single filter like so:
 
 .. code-block:: python
 
-    ['^', ['k1', '=~', '^Email$']]
+    ['!', ['=~', 'k1', '^Email$']]
 
 Expressions can be combined as needed to do more complex matching:
 
@@ -47,12 +47,12 @@ Expressions can be combined as needed to do more complex matching:
 
     ['|', [
         ['&', [
-            ['k1', '>', 4],
-            ['k2', '>', 4],
+            ['>', 'k1', 4],
+            ['>', 'k2', 4],
         ]],
         ['&', [
-            ['k3', '<', 5],
-            ['k4', '<', 5],
+            ['<', 'k3', 5],
+            ['<', 'k4', 5],
         ]],
     ]]
 

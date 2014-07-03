@@ -6,9 +6,9 @@ A quick example of kmatch is below.
 
 .. code-block:: python
 
-    from kmatch import KMatch
+    from kmatch import K
 
-    k = KMatch(['k', '>=', 10])
+    k = K(['>=', 'k', 10])
     print k.match({'k': 9})
     False
 
@@ -19,11 +19,11 @@ More powerful expressions can be made to match more types of patterns.
 
 .. code-block:: python
 
-    from kmatch import KMatch
+    from kmatch import K
 
-    k = KMatch(['&',
-        ['k1', '=~', '.*Hello.*'],
-        ['k2', '!=', False]
+    k = K(['&',
+        ['=~', 'k1', '.*Hello.*'],
+        ['!=', 'k2', False]
     ])
 
     # Match all a dictionary whose 'k1' key has a pattern of '.*Hello.*' and whose 'k2' key is not False
