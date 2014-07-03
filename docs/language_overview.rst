@@ -31,6 +31,8 @@ Along with filtering on values referenced by keys, the keys themselves can be fi
 
     ['?', 'key_name']
 
+The above will return ``True`` when ``key_name`` is a key in the dictionary being matched.
+
 The following are all valid key filter operators:
 
     * ``?`` Performs an existence filter
