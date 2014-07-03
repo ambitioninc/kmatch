@@ -1,13 +1,10 @@
 .. image:: https://travis-ci.org/ambitioninc/kmatch.png
    :target: https://travis-ci.org/ambitioninc/kmatch
 
-
 kmatch
 ===============
 
-
-I have failed to provide a good README.rst in my project, and you should shun
-me if I do any pull requests
+A language for matching/validating/filtering Python dictionaries
 
 Installation
 ------------
