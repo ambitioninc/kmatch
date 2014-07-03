@@ -118,7 +118,7 @@ If keys from a kmatch pattern do not exist in the matched dictionary, the defaul
         # Traceback message here ...
     KeyError: 'k1'
 
-This behavior, however, is not always desirable when matching dictionaries that have many keys that may or may not exist. It can be cumbersome to always have to check for existence along with doing filtering. To avoid this scenario, the ``K`` object comes with an optional ``supress_key_errors`` flag that defaults to ``False``. If set to ``True``, the value ``False`` will be returned any time a key does not exist for an associated filter instead of a ``KeyError`` being raised.
+This behavior, however, is not always desirable when matching dictionaries that have many keys that may or may not exist. It can be cumbersome to always have to check for existence along with doing filtering. To avoid this scenario, the ``K`` object comes with an optional ``suppress_key_errors`` flag that defaults to ``False``. If set to ``True``, the value ``False`` will be returned any time a key does not exist for an associated filter instead of a ``KeyError`` being raised.
 
 Take our previous example, except with ``suppress_key_errors`` set to ``True``.
 
