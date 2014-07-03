@@ -107,8 +107,8 @@ Operators can be combined in various ways to form more complex patterns like so:
     })
     True
 
-Notes about filtering with non-extant keys
-------------------------------------------
+Filtering with non-extant keys and suppressing KeyErrors
+--------------------------------------------------------
 If keys from a kmatch pattern do not exist in the matched dictionary, the default behavior is to throw a ``KeyError`` exception:
 
 .. code-block:: python
@@ -117,3 +117,12 @@ If keys from a kmatch pattern do not exist in the matched dictionary, the defaul
     Traceback (most recent call last):
         # Traceback message here ...
     KeyError: 'k1'
+
+This behavior, however, is not always desirable when matching dictionaries that have many keys that may or may not exist. It can be cumbersome to always have to check for existence along with doing filtering. To avoid this scenario, the ``K`` object comes with an optional ``supress_key_errors`` flag that defaults to ``False``. If ``True``, anytime a key does not exist for an associated filter, ``False`` will be returned instead of a ``KeyError`` being raised.
+
+Take our previous example, except with ``suppress_key_errors`` set to ``True``.
+
+.. code-block:: python
+    
+    print K(['==', 'k1', 5], suppress_key_errors=True).match({'k2': 1})
+    False

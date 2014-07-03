@@ -33,7 +33,7 @@ class K(object):
 
         :param p: The kmatch pattern
         :type p: dict
-        :param suppress_key_errors: Suppress KeyError exceptions and return False instead
+        :param suppress_key_errors: Suppress KeyError exceptions on filters and return False instead
         :type suppress_key_errors: bool
         :raises: ValueError on an invalid pattern or regex
         """
@@ -94,7 +94,7 @@ class K(object):
                 if self._suppress_key_errors:
                     return False
                 else:
-                    raise KeyError
+                    raise
 
     def _match_operator(self, p, value):
         """
@@ -124,6 +124,7 @@ class K(object):
         :param value: The value to be matched
         :type value: dict
         :returns: True if the value matches the pattern, False otherwise
-        :raises: KeyError if key from pattern does not exist in input value
+        :raises: KeyError if key from pattern does not exist in input value and the suppress_key_errors class variable
+                 is False
         """
         return self._match(self._pattern, value)

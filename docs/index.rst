@@ -30,6 +30,6 @@ More powerful expressions can be made to match more types of patterns.
     k.match(...)
 
 
-The kmatch app can be used for a wide variety of applications. One example is filtering a list of dictionaries that match a pattern. Another example is to validate dictionaries passed to a function.
+The kmatch library can be used for a wide variety of applications. One example is filtering a list of dictionaries that match a pattern. Another example is to validate dictionaries passed to a function.
 
 Installation, overview of the language, usage examples, and code documentation are overviewed in the following.
