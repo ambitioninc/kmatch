@@ -1,14 +1,13 @@
 .. _ref-kmatch:
 
-kmatch
+Code documentation
 ==================
 
-kmatch
-------------------
+K
+------
 
 .. automodule:: kmatch
-.. autoclass:: kmatch.kmatch
+.. autoclass:: kmatch.K
     :members:
-    :undoc-members:
 
     .. automethod:: __init__

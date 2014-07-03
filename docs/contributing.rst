@@ -16,9 +16,9 @@ To get the source source code and run the unit tests, run::
     $ cd kmatch
     $ virtualenv env
     $ . env/bin/activate
+    $ pip install nose
     $ python setup.py install
-    $ coverage run setup.py test
-    $ coverage report
+    $ python setup.py nosetests
 
 While 100% code coverage does not make a library bug-free, it significantly
 reduces the number of easily caught bugs! Please make sure coverage is at 100%
@@ -43,7 +43,6 @@ Please arrange imports with the following style
 
     # Third party package imports
     from mock import patch
-    from django.conf import settings
 
     # Local package imports
     from kmatch.version import __version__
@@ -70,7 +69,8 @@ Before a new release, please go through the following checklist:
 * Bump version in kmatch/version.py
 * Git tag the version
 * Add a release note in docs/release_notes/
-* Add the newest release note to docs/release_notes/index.rst
+* Add a link to the newest release note to docs/release_notes/index.rst
+* Upload to pypi
 
 Vulnerability Reporting
 -----------------------
