@@ -43,14 +43,14 @@ class KMatch(object):
         return len(p) == 2 and p[0] in self._OPERATOR_MAP and isinstance(p[1], (list, tuple))
 
     def _is_filter(self, p):
-        return len(p) == 3 and p[1] in self._FILTER_MAP
+        return len(p) == 3 and p[0] in self._FILTER_MAP
 
     def _compile(self, p):
         """
         Recursively compiles the regexs in the pattern (p).
         """
         if self._is_filter(p):
-            if p[1] == '=~':
+            if p[0] == '=~':
                 try:
                     p[2] = re.compile(p[2])
                 except:  # Python doesn't document exactly what exceptions re.compile throws
@@ -91,7 +91,7 @@ class KMatch(object):
         """
         Returns True of False if value matches the filter.
         """
-        return self._FILTER_MAP[p[1]](value.get(p[0]), p[2])
+        return self._FILTER_MAP[p[0]](value.get(p[1]), p[2])
 
     def match(self, value):
         """
