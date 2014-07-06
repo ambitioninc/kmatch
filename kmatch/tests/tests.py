@@ -199,6 +199,29 @@ class KMatchTest(TestCase):
             ]
         ]).match({'f1': 'Task', 'f2': 2}))
 
+    def test_xor_true(self):
+        self.assertTrue(K([
+            '^', [
+                ['?', 'email'],
+                ['?', 'e-mail']
+            ]
+        ]).match({'email': 'opensource@ambition.com'}))
+        self.assertTrue(K([
+            '^', [
+                ['?', 'email'],
+                ['?', 'e-mail']
+            ]
+        ]).match({'e-mail': 'opensource@ambition.com'}))
+
+    def test_xor_false(self):
+        self.assertFalse(K([
+            '^', [
+                ['?', 'email'],
+                ['?', 'e-mail']
+            ]
+        ]).match({'email': 'opensource@ambition.com',
+                  'e-mail': 'opensource@ambition.com'}))
+
 
 class KInitTest(TestCase):
     """
@@ -239,6 +262,24 @@ class KInitTest(TestCase):
     def test_non_dict_list(self):
         with self.assertRaises(ValueError):
             K('aaa')
+
+    def test_invalid_xor(self):
+        with self.assertRaises(ValueError):
+            K([
+                '^',
+                [
+                    ['?', 'a'],
+                    ['?', 'b'],
+                    ['?', 'c']
+                ]
+            ])
+        with self.assertRaises(ValueError):
+            K([
+                '^',
+                [
+                    ['?', 'a'],
+                ]
+            ])
 
     @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
     def test_unnested(self, mock_compile):
