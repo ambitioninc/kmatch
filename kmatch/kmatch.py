@@ -32,7 +32,7 @@ class K(object):
         Sets the pattern, performs validation on the pattern, and compiles its regexs if it has any.
 
         :param p: The kmatch pattern
-        :type p: dict
+        :type p: list
         :param suppress_key_errors: Suppress KeyError exceptions on filters and return False instead
         :type suppress_key_errors: bool
         :raises: ValueError on an invalid pattern or regex
