@@ -4,6 +4,15 @@ from mock import patch
 from kmatch import K
 
 
+class KPatternTest(TestCase):
+    """
+    Tests the pattern function in K.
+    """
+    def test_pattern(self):
+        k = K(['=~', 'hi', 'hi'])
+        self.assertEquals(k.pattern, ['=~', 'hi', 'hi'])
+
+
 class KMatchTest(TestCase):
     """
     Tests the match function in K.
@@ -235,20 +244,20 @@ class KInitTest(TestCase):
     def test_unnested(self, mock_compile):
         k = K(['=~', 'field', 'hi'])
         self.assertEquals(mock_compile.call_count, 1)
-        self.assertEquals(k._pattern, ['=~', 'field', 'hi_compiled'])
+        self.assertEquals(k._compiled_pattern, ['=~', 'field', 'hi_compiled'])
 
     @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
     def test_nested_list_of_single_dict(self, mock_compile):
         k = K(['!', ['=~', 'field', 'hi']])
         self.assertEquals(mock_compile.call_count, 1)
-        self.assertEquals(k._pattern, ['!', ['=~', 'field', 'hi_compiled']])
+        self.assertEquals(k._compiled_pattern, ['!', ['=~', 'field', 'hi_compiled']])
 
     @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
     def test_nested_list_of_lists(self, mock_compile):
         k = K(['&', [['=~', 'f', 'hi'], ['=~', 'f', 'hello']]])
         self.assertEquals(mock_compile.call_count, 2)
         self.assertEquals(
-            k._pattern,
+            k._compiled_pattern,
             ['&', [['=~', 'f', 'hi_compiled'], ['=~', 'f', 'hello_compiled']]])
 
     @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
@@ -265,7 +274,7 @@ class KInitTest(TestCase):
             ]]
         ]])
         self.assertEquals(mock_compile.call_count, 5)
-        self.assertEquals(k._pattern, ['&', [
+        self.assertEquals(k._compiled_pattern, ['&', [
             ['=~', 'f', 'hi_compiled'],
             ['=~', 'f', 'hello_compiled'],
             ['|', [

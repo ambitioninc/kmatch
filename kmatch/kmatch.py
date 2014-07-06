@@ -37,14 +37,25 @@ class K(object):
         :type suppress_key_errors: bool
         :raises: ValueError on an invalid pattern or regex
         """
-        self._pattern = deepcopy(p)
+        self._raw_pattern = deepcopy(p)
+        self._compiled_pattern = deepcopy(p)
         self._suppress_key_errors = suppress_key_errors
 
         # Validate the pattern is in the appropriate format
-        self._validate(self._pattern)
+        self._validate(self._compiled_pattern)
 
         # Compile any regexs in the pattern
-        self._compile(self._pattern)
+        self._compile(self._compiled_pattern)
+
+    @property
+    def pattern(self):
+        """
+        Gets the kmatch pattern.
+
+        :returns: The kmatch pattern dictionary originally provided to the K object
+        :rtype: dict
+        """
+        return self._raw_pattern
 
     def _is_operator(self, p):
         return len(p) == 2 and p[0] in self._OPERATOR_MAP and isinstance(p[1], (list, tuple))
@@ -119,12 +130,13 @@ class K(object):
 
     def match(self, value):
         """
-        Matches the value to the pattern
+        Matches the value to the pattern.
 
         :param value: The value to be matched
         :type value: dict
         :returns: True if the value matches the pattern, False otherwise
+        :rtype: bool
         :raises: KeyError if key from pattern does not exist in input value and the suppress_key_errors class variable
                  is False
         """
-        return self._match(self._pattern, value)
+        return self._match(self._compiled_pattern, value)
