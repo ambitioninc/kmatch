@@ -1,0 +1,4 @@
+kmatch v0.1.1
+=============
+
+Adds the ``pattern`` property to the ``K`` object, allowing the user to obtain the original pattern of the ``K`` object before compilation.
