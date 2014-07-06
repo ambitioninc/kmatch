@@ -136,7 +136,6 @@ class K(object):
         :type value: dict
         :rtype: bool
         :returns: True if the value matches the pattern, False otherwise
-        :rtype: bool
         :raises: KeyError if key from pattern does not exist in input value and the suppress_key_errors class variable
                  is False
         """
