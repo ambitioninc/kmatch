@@ -46,6 +46,7 @@ Filters can then be joined together with the following logical operators in pref
     * ``&`` Performs a logical ``AND`` on a list of filters
     * ``|`` Performs a logical ``OR`` on a list of filters
     * ``!`` Performs a logical ``NOT`` on a single filter
+    * ``^`` Performs a logical ``XOR`` on two filters
 
 The notation for ``AND`` looks like the following:
 
@@ -61,6 +62,16 @@ The notation for ``OR`` is similar to ``AND``. The ``NOT`` operator works on a s
 .. code-block:: python
 
     ['!', ['=~', 'k1', '^Email$']]
+
+The notation for ``XOR`` requires two filters or results. For example, if you
+wanted the key 'e-mail' or 'email' but not both:
+
+.. code-block:: python
+
+    ['^', [
+        ['?', 'e-mail'],
+        ['?', 'email'],
+    ]]
 
 Expressions can be combined as needed to do more complex matching:
 

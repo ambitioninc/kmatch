@@ -1,5 +1,5 @@
 from copy import deepcopy
-from operator import not_, lt, le, eq, ge, ne, gt
+from operator import not_, lt, le, eq, ge, ne, gt, xor
 import re
 
 
@@ -12,6 +12,7 @@ class K(object):
         '&': all,
         '|': any,
         '!': not_,
+        '^': xor,
     }
     _VALUE_FILTER_MAP = {
         '==': eq,
@@ -32,7 +33,7 @@ class K(object):
         Sets the pattern, performs validation on the pattern, and compiles its regexs if it has any.
 
         :param p: The kmatch pattern
-        :type p: dict
+        :type p: list
         :param suppress_key_errors: Suppress KeyError exceptions on filters and return False instead
         :type suppress_key_errors: bool
         :raises: ValueError on an invalid pattern or regex
@@ -53,7 +54,7 @@ class K(object):
         Gets the kmatch pattern.
 
         :returns: The kmatch pattern dictionary originally provided to the K object
-        :rtype: dict
+        :rtype: list
         """
         return self._raw_pattern
 
@@ -85,9 +86,18 @@ class K(object):
         """
         if self._is_operator(p):
             for operator_or_filter in (p[1] if p[0] != '!' else [p[1]]):
+                if p[0] == '^':
+                    self._validate_xor_args(p)
                 self._validate(operator_or_filter)
         elif not self._is_value_filter(p) and not self._is_key_filter(p):
             raise ValueError('Not a valid operator or filter - {0}'.format(p))
+
+    def _validate_xor_args(self, p):
+        """
+        Raises ValueError if 2 arguments are not passed to an XOR
+        """
+        if len(p[1]) != 2:
+            raise ValueError('Invalid syntax: XOR only accepts 2 arguments, got {0}: {1}'.format(len(p[1]), p))
 
     def _match(self, p, value):
         """
@@ -109,10 +119,12 @@ class K(object):
 
     def _match_operator(self, p, value):
         """
-        Returns True or False if the operator (&, |, or ! with filters) matches the value dictionary.
+        Returns True or False if the operator (&, |, or ! with filters, or ^ with filters) matches the value dictionary
         """
         if p[0] == '!':
             return self._OPERATOR_MAP[p[0]](self._match(p[1], value))
+        elif p[0] == '^':
+            return self._OPERATOR_MAP[p[0]](self._match(p[1][0], value), self._match(p[1][1], value))
         else:
             return self._OPERATOR_MAP[p[0]]([self._match(operator_or_filter, value) for operator_or_filter in p[1]])
 
@@ -136,7 +148,6 @@ class K(object):
         :type value: dict
         :rtype: bool
         :returns: True if the value matches the pattern, False otherwise
-        :rtype: bool
         :raises: KeyError if key from pattern does not exist in input value and the suppress_key_errors class variable
                  is False
         """
