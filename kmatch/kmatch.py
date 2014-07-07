@@ -54,7 +54,7 @@ class K(object):
         Gets the kmatch pattern.
 
         :returns: The kmatch pattern dictionary originally provided to the K object
-        :rtype: dict
+        :rtype: list
         """
         return self._raw_pattern
 
