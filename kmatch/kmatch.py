@@ -124,7 +124,7 @@ class K(object):
         if p[0] == '!':
             return self._OPERATOR_MAP[p[0]](self._match(p[1], value))
         elif p[0] == '^':
-            return self._OPERATOR_MAP[p[0]](*[self._match(operator_or_filter, value) for operator_or_filter in p[1]])
+            return self._OPERATOR_MAP[p[0]](p[1][0], p[1][1])
         else:
             return self._OPERATOR_MAP[p[0]]([self._match(operator_or_filter, value) for operator_or_filter in p[1]])
 
