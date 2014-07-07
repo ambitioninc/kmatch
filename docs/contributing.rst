@@ -68,8 +68,7 @@ Before a new release, please go through the following checklist:
 
 * Bump version in kmatch/version.py
 * Git tag the version
-* Add a release note in docs/release_notes/
-* Add a link to the newest release note to docs/release_notes/index.rst
+* Add a release note in docs/release_notes.rst
 * Upload to pypi
 
 Vulnerability Reporting

@@ -10,9 +10,4 @@ Table of Contents
    usage_examples
    ref/kmatch
    contributing
-   release_notes/index
-
-Indices and tables
-==================
-
-* :ref:`search`
+   release_notes
