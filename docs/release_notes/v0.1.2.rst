@@ -1,0 +1,5 @@
+kmatch v0.1.2
+=============
+
+* Added python 3.4
+* Added XOR operator
