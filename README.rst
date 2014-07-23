@@ -1,6 +1,9 @@
 .. image:: https://travis-ci.org/ambitioninc/kmatch.png
    :target: https://travis-ci.org/ambitioninc/kmatch
 
+.. image:: https://coveralls.io/repos/ambitioninc/kmatch/badge.png
+    :target: https://coveralls.io/r/ambitioninc/kmatch
+
 kmatch
 ===============
 
