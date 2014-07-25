@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+v0.1.3
+------
+* Added kmatchMixin for tests
+
 v0.1.2
 ------
 

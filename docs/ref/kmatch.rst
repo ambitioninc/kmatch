@@ -4,7 +4,7 @@ Code documentation
 ==================
 
 K
-------
+-
 
 .. automodule:: kmatch
 .. autoclass:: kmatch.K
