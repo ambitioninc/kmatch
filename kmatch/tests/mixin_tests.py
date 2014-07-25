@@ -29,6 +29,7 @@ class MixinTestUsingMixin(kmatchMixin, unittest.TestCase):
         Test .assertNotMatches() using the mixin on a false match
         """
         self.assertNotMatches(['<=', 'f', 0], {'g': 1})
+        self.assertNotMatches(['<=', 'f', 0], {'f': 1})
 
     def test_not_matches_raises_error(self):
         """
