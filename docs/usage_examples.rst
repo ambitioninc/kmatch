@@ -145,8 +145,8 @@ The ``kmatchMixin`` can be used for test classes when you want to verify a dicti
         def my_opposite_test(self):
             with self.assertRaises(AssertionError):
                 self.assertNotMatches(['<=', 'f', 0], {'f': -1})
-            with self.assertRaises(AssertionError):
-                self.assertNotMatches(['<=', 'f', 0], {'g': 1})
+
+            self.assertNotMatches(['<=', 'f', 0], {'g': 1})
 
 
 .. note:: The ``suppress_key_errors`` parameter is set to ``False`` by default for ``.assertMatches()``, and ``True``
