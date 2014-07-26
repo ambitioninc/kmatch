@@ -1,11 +1,11 @@
 from .kmatch import K
 
 
-class kmatchMixin(object):
+class KmatchTestMixin(object):
     """
     A mixin for test classes to perform kmatch validation on dictionaries
     """
-    def assertMatches(self, pattern, value, suppress_key_errors=False):
+    def assertKmatches(self, pattern, value, suppress_key_errors=False):
         """
         Assert that the value matches the kmatch pattern.
 
@@ -25,7 +25,7 @@ class kmatchMixin(object):
         """
         assert K(pattern, suppress_key_errors=suppress_key_errors).match(value)
 
-    def assertNotMatches(self, pattern, value, suppress_key_errors=True):
+    def assertNotKmatches(self, pattern, value, suppress_key_errors=True):
         """
         Assert that the value does **not** matches the kmatch pattern.
 

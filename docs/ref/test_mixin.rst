@@ -3,9 +3,9 @@
 Test Mixin
 ==========
 
-kmatchMixin
------------
+KmatchTestMixin
+---------------
 
 .. automodule:: kmatch
-.. autoclass:: kmatch.kmatchMixin
+.. autoclass:: kmatch.KmatchTestMixin
     :members:

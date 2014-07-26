@@ -130,24 +130,24 @@ Take our previous example, except with ``suppress_key_errors`` set to ``True``.
 Using the test mixin
 --------------------
 
-The ``kmatchMixin`` can be used for test classes when you want to verify a dictionary matches a particular pattern.
+The ``KmatchTestMixin`` can be used for test classes when you want to verify a dictionary matches a particular pattern.
 
  .. code-block:: python
 
     from unittest import TestCase
-    from kmatch import kmatchMixin
+    from kmatch import KmatchTestMixin
 
 
-    class MyTestClass(kmatchMixin, TestCase):
+    class MyTestClass(KmatchTestMixin, TestCase):
         def my_test(self):
-            self.assertMatches(['<=', 'f', 0], {'f': -1})
+            self.assertKmatches(['<=', 'f', 0], {'f': -1})
 
         def my_opposite_test(self):
             with self.assertRaises(AssertionError):
-                self.assertNotMatches(['<=', 'f', 0], {'f': -1})
+                self.assertNotKmatches(['<=', 'f', 0], {'f': -1})
 
-            self.assertNotMatches(['<=', 'f', 0], {'g': 1})
+            self.assertNotKmatches(['<=', 'f', 0], {'g': 1})
 
 
-.. note:: The ``suppress_key_errors`` parameter is set to ``False`` by default for ``.assertMatches()``, and ``True``
-    for ``.assertNotMatches()``.
+.. note:: The ``suppress_key_errors`` parameter is set to ``False`` by default for ``.assertKmatches()``, and ``True``
+    for ``.assertNotKmatches()``.
