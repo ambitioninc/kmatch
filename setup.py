@@ -35,6 +35,7 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
+        'Development Status :: 5 - Production/Stable',
     ],
     license='MIT',
     install_requires=[],
