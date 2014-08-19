@@ -9,5 +9,6 @@ Table of Contents
    language_overview
    usage_examples
    ref/kmatch
+   ref/test_mixin
    contributing
    release_notes

@@ -126,3 +126,28 @@ Take our previous example, except with ``suppress_key_errors`` set to ``True``.
     
     print K(['==', 'k1', 5], suppress_key_errors=True).match({'k2': 1})
     False
+
+Using the test mixin
+--------------------
+
+The ``KmatchTestMixin`` can be used for test classes when you want to verify a dictionary matches a particular pattern.
+
+ .. code-block:: python
+
+    from unittest import TestCase
+    from kmatch import KmatchTestMixin
+
+
+    class MyTestClass(KmatchTestMixin, TestCase):
+        def my_test(self):
+            self.assertKmatches(['<=', 'f', 0], {'f': -1})
+
+        def my_opposite_test(self):
+            with self.assertRaises(AssertionError):
+                self.assertNotKmatches(['<=', 'f', 0], {'f': -1})
+
+            self.assertNotKmatches(['<=', 'f', 0], {'g': 1})
+
+
+.. note:: The ``suppress_key_errors`` parameter is set to ``False`` by default for ``.assertKmatches()``, and ``True``
+    for ``.assertNotKmatches()``.

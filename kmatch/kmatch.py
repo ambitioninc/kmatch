@@ -36,7 +36,7 @@ class K(object):
         :type p: list
         :param suppress_key_errors: Suppress KeyError exceptions on filters and return False instead
         :type suppress_key_errors: bool
-        :raises: ValueError on an invalid pattern or regex
+        :raises: :class:`ValueError <exceptions.ValueError>` on an invalid pattern or regex
         """
         self._raw_pattern = deepcopy(p)
         self._compiled_pattern = deepcopy(p)
@@ -148,7 +148,7 @@ class K(object):
         :type value: dict
         :rtype: bool
         :returns: True if the value matches the pattern, False otherwise
-        :raises: KeyError if key from pattern does not exist in input value and the suppress_key_errors class variable
-                 is False
+        :raises: :class:`KeyError <exceptions.KeyError>` if key from pattern does not exist in input value and the
+                suppress_key_errors class variable is False
         """
         return self._match(self._compiled_pattern, value)
