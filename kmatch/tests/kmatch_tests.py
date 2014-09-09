@@ -55,6 +55,9 @@ class KMatchTest(TestCase):
         with self.assertRaises(KeyError):
             self.assertFalse(K(['>', 'f', 0]).match({}))
 
+    def test_null_regex_match_false(self):
+        self.assertFalse(K(['=~', 'f', '^hi$']).match({'f': None}))
+
     def test_basic_regex_true(self):
         self.assertTrue(K(['=~', 'f', '^hi$']).match({'f': 'hi'}))
 

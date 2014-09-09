@@ -21,7 +21,7 @@ class K(object):
         '>': gt,
         '<=': le,
         '>=': ge,
-        '=~': lambda match_str, regex: regex.match(match_str),
+        '=~': lambda match_str, regex: regex.match(match_str) if match_str is not None else False,
     }
     _KEY_FILTER_MAP = {
         '?': lambda key, value: key in value,
