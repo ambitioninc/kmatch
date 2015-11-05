@@ -157,6 +157,8 @@ class K(object):
         """
         Builds a set of all field keys used in the pattern including nested fields.
 
+        :param pattern: The kmatch pattern to get field keys from or None to use self.pattern
+        :type pattern: list or None
         :returns: A set object of all field keys used in the pattern
         :rtype: set
         """
