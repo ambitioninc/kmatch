@@ -152,3 +152,28 @@ class K(object):
                 suppress_key_errors class variable is False
         """
         return self._match(self._compiled_pattern, value)
+
+    def get_field_keys(self, pattern=None):
+        """
+        Builds a set of all field keys used in the pattern including nested fields.
+
+        :returns: A set object of all field keys used in the pattern
+        :rtype: set
+        """
+        # Use own pattern or passed in argument for recursion
+        pattern = pattern or self.pattern
+        keys = set()
+
+        # Valid pattern length can only be 2 or 3
+        if len(pattern) == 2:
+            if pattern[0] in ('&', '|', '^'):
+                # Pass each nested pattern to get_field_keys
+                for filter_item in pattern[1]:
+                    keys = keys.union(self.get_field_keys(filter_item))
+            else:
+                # pattern[0] == '!'
+                keys = keys.union(self.get_field_keys(pattern[1]))
+        else:
+            # Pattern length is 3
+            keys.add(pattern[1])
+        return keys
