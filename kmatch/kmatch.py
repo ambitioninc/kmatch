@@ -164,6 +164,10 @@ class K(object):
         """
         # Use own pattern or passed in argument for recursion
         pattern = pattern or self.pattern
+
+        # Validate the pattern so we can make assumptions about the data
+        self._validate(pattern)
+
         keys = set()
 
         # Valid pattern length can only be 2 or 3
