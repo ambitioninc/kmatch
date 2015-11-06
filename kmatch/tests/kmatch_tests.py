@@ -246,6 +246,16 @@ class KMatchTest(TestCase):
         ]]
         self.assertEqual(K(pattern).get_field_keys(), set(['one', 'two', 'three', 'four', 'five']))
 
+    def test_get_field_keys_invalid_pattern(self):
+        """
+        Verifies that an error is raised for invalid patterns
+        """
+        pattern = ['&', [
+            ['invalid', 'one', 'one value']
+        ]]
+        with self.assertRaises(ValueError):
+            K(pattern).get_field_keys()
+
 
 class KInitTest(TestCase):
     """
