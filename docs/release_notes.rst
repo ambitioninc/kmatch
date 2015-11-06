@@ -1,10 +1,6 @@
 Release Notes
 =============
 
-v0.1.5
-------
-* Added a method to get a set of all field keys used in a kmatch pattern
-
 v0.1.3
 ------
 * Added KmatchTestMixin for tests

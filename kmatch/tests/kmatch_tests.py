@@ -225,27 +225,6 @@ class KMatchTest(TestCase):
         ]).match({'email': 'opensource@ambition.com',
                   'e-mail': 'opensource@ambition.com'}))
 
-    def test_get_field_keys(self):
-        """
-        Verifies that all field keys are returned
-        """
-        pattern = ['&', [
-            ['=~', 'one', 'one value'],
-            ['=~', 'two', 'two value'],
-            ['|', [
-                ['=~', 'three', 'three value'],
-                ['!', ['=~', 'one', 'other one value']],
-                ['^', [
-                    ['==', 'five', 'five value'],
-                    ['==', 'five', 'five value']
-                ]],
-                ['&', [
-                    ['=~', 'four', 'four value'],
-                ]]
-            ]],
-        ]]
-        self.assertEqual(K(pattern).get_field_keys(), set(['one', 'two', 'three', 'four', 'five']))
-
 
 class KInitTest(TestCase):
     """
