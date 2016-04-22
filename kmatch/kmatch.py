@@ -171,7 +171,8 @@ class K(object):
         keys = set()
 
         # Valid pattern length can only be 2 or 3
-        if len(pattern) == 2:
+        # With key filters, field key is second item just like 3 item patterns
+        if len(pattern) == 2 and pattern[0] not in self._KEY_FILTER_MAP:
             if pattern[0] in ('&', '|', '^'):
                 # Pass each nested pattern to get_field_keys
                 for filter_item in pattern[1]:

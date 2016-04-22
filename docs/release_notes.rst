@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+v0.1.6
+------
+* Bugfix to support key filter patterns when using get_field_keys
+
 v0.1.5
 ------
 * Added a method to get a set of all field keys used in a kmatch pattern

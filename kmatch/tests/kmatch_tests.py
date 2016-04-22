@@ -230,6 +230,7 @@ class KMatchTest(TestCase):
         Verifies that all field keys are returned
         """
         pattern = ['&', [
+            ['?', 'foo'],
             ['=~', 'one', 'one value'],
             ['=~', 'two', 'two value'],
             ['|', [
@@ -244,7 +245,7 @@ class KMatchTest(TestCase):
                 ]]
             ]],
         ]]
-        self.assertEqual(K(pattern).get_field_keys(), set(['one', 'two', 'three', 'four', 'five']))
+        self.assertEqual(K(pattern).get_field_keys(), set(['one', 'two', 'three', 'four', 'five', 'foo']))
 
     def test_get_field_keys_invalid_pattern(self):
         """
