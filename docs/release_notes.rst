@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+v0.1.7
+------
+* Python 3.6 support
+
 v0.1.6
 ------
 * Bugfix to support key filter patterns when using get_field_keys
