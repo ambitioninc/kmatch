@@ -120,11 +120,22 @@ class KMatchTest(TestCase):
         """
         Handles different data type comparisons in py3
         """
-        if version[0] == 3:
+        if version[0] == '2':  # pragma: no cover
+            with patch('kmatch.K._match_value_filter') as mock_match_value_filter:
+                mock_match_value_filter.side_effect = TypeError
+
+                with self.assertRaises(TypeError):
+                    K(['>=', 'k', 3]).match({'k': None})
+                with self.assertRaises(TypeError):
+                    K(['>=', 'k', 3]).match({'k': ''})
+                self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': None}))
+                self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': ''}))
+
+        if version[0] == '3':  # pragma: no cover
             with self.assertRaises(TypeError):
-                self.assertFalse(K(['>=', 'k', 3]).match({'k': None}))
+                K(['>=', 'k', 3]).match({'k': None})
             with self.assertRaises(TypeError):
-                self.assertFalse(K(['>=', 'k', 3]).match({'k': ''}))
+                K(['>=', 'k', 3]).match({'k': ''})
             self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': None}))
             self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': ''}))
 
