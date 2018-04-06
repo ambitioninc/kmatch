@@ -292,6 +292,12 @@ class KMatchTest(TestCase):
         with self.assertRaises(ValueError):
             K(pattern).get_field_keys()
 
+    def test_properties(self):
+        k = K(['<=', 'f', 0])
+        self.assertFalse(k.suppress_exceptions)
+        k.suppress_exceptions = True
+        self.assertTrue(k.suppress_exceptions)
+
 
 class KInitTest(TestCase):
     """
