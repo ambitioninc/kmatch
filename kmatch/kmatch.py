@@ -192,3 +192,11 @@ class K(object):
             # Pattern length is 3
             keys.add(pattern[1])
         return keys
+
+    @property
+    def suppress_exceptions(self):
+        return self._suppress_exceptions
+
+    @suppress_exceptions.setter
+    def suppress_exceptions(self, suppress_exceptions):
+        self._suppress_exceptions = suppress_exceptions

@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+v0.2.1
+------
+* Use property and setter for suppress exceptions
+
 v0.2.0
 ------
 * Handle data type mismatch comparisons and return False
