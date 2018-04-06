@@ -1,3 +1,4 @@
+from sys import version
 from unittest import TestCase
 from mock import patch
 
@@ -91,6 +92,9 @@ class KMatchTest(TestCase):
     def test_basic_suppress_key_errors(self):
         self.assertFalse(K(['==', 'k', 3], suppress_key_errors=True).match({}))
 
+    def test_basic_suppress_exceptions(self):
+        self.assertFalse(K(['==', 'k', 3], suppress_exceptions=True).match({}))
+
     def test_not_field_true(self):
         self.assertTrue(K([
             '!', ['>=', 'f', 3],
@@ -103,6 +107,26 @@ class KMatchTest(TestCase):
                 ['>', 'f', 5],
             ]
         ], suppress_key_errors=True).match({'f': 6}))
+
+    def test_compound_suppress_exceptions_gte_true(self):
+        self.assertTrue(K([
+            '|', [
+                ['==', 'f1', 5],
+                ['>', 'f', 5],
+            ]
+        ], suppress_exceptions=True).match({'f': 6}))
+
+    def test_type_exception(self):
+        """
+        Handles different data type comparisons in py3
+        """
+        if version[0] == 3:
+            with self.assertRaises(TypeError):
+                self.assertFalse(K(['>=', 'k', 3]).match({'k': None}))
+            with self.assertRaises(TypeError):
+                self.assertFalse(K(['>=', 'k', 3]).match({'k': ''}))
+            self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': None}))
+            self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': ''}))
 
     def test_compound_existence_gte_true(self):
         self.assertTrue(K([
