@@ -28,7 +28,7 @@ class K(object):
         '!?': lambda key, value: key not in value,
     }
 
-    def __init__(self, p, suppress_key_errors=False):
+    def __init__(self, p, suppress_key_errors=False, suppress_exceptions=False):
         """
         Sets the pattern, performs validation on the pattern, and compiles its regexs if it has any.
 
@@ -36,11 +36,14 @@ class K(object):
         :type p: list
         :param suppress_key_errors: Suppress KeyError exceptions on filters and return False instead
         :type suppress_key_errors: bool
+        :param suppress_exceptions: Suppress all exceptions on filters and return False instead
+        :type suppress_exceptions: bool
         :raises: :class:`ValueError <exceptions.ValueError>` on an invalid pattern or regex
         """
         self._raw_pattern = deepcopy(p)
         self._compiled_pattern = deepcopy(p)
         self._suppress_key_errors = suppress_key_errors
+        self._suppress_exceptions = suppress_exceptions
 
         # Validate the pattern is in the appropriate format
         self._validate(self._compiled_pattern)
@@ -112,7 +115,12 @@ class K(object):
                 else:
                     return self._match_key_filter(p, value)
             except KeyError:
-                if self._suppress_key_errors:
+                if self._suppress_key_errors or self._suppress_exceptions:
+                    return False
+                else:
+                    raise
+            except TypeError:
+                if self._suppress_exceptions:
                     return False
                 else:
                     raise

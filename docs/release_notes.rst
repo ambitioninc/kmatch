@@ -1,6 +1,10 @@
 Release Notes
 =============
 
+v0.2.0
+------
+* Handle data type mismatch comparisons and return False
+
 v0.1.7
 ------
 * Python 3.6 support
