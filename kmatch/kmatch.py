@@ -119,7 +119,7 @@ class K(object):
                     return False
                 else:
                     raise
-            except Exception:
+            except TypeError:
                 if self._suppress_exceptions:
                     return False
                 else:
