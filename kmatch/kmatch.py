@@ -76,7 +76,7 @@ class K(object):
         """
         if self._is_value_filter(p) and p[0] == '=~':
             try:
-                p[2] = re.compile(p[2])
+                p[2] = re.compile(p[2], re.DOTALL)
             except:  # Python doesn't document exactly what exceptions re.compile throws
                 raise ValueError('Bad regex - {0}'.format(p[2]))
         elif self._is_operator(p):
