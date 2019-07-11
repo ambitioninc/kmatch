@@ -62,6 +62,9 @@ class KMatchTest(TestCase):
     def test_basic_regex_true(self):
         self.assertTrue(K(['=~', 'f', '^hi$']).match({'f': 'hi'}))
 
+    def test_multiline_regex_true(self):
+        self.assertTrue(K(['=~', 'f', '.*hi.*']).match({'f': 'foo\nhi'}))
+
     def test_basic_regex_false(self):
         self.assertFalse(K(['=~', 'f', '^hi$']).match({'f': ' hi'}))
 
@@ -357,19 +360,19 @@ class KInitTest(TestCase):
                 ]
             ])
 
-    @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
+    @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x, flags: '{0}_compiled'.format(x))
     def test_unnested(self, mock_compile):
         k = K(['=~', 'field', 'hi'])
         self.assertEquals(mock_compile.call_count, 1)
         self.assertEquals(k._compiled_pattern, ['=~', 'field', 'hi_compiled'])
 
-    @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
+    @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x, flags: '{0}_compiled'.format(x))
     def test_nested_list_of_single_dict(self, mock_compile):
         k = K(['!', ['=~', 'field', 'hi']])
         self.assertEquals(mock_compile.call_count, 1)
         self.assertEquals(k._compiled_pattern, ['!', ['=~', 'field', 'hi_compiled']])
 
-    @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
+    @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x, flags: '{0}_compiled'.format(x))
     def test_nested_list_of_lists(self, mock_compile):
         k = K(['&', [['=~', 'f', 'hi'], ['=~', 'f', 'hello']]])
         self.assertEquals(mock_compile.call_count, 2)
@@ -377,7 +380,7 @@ class KInitTest(TestCase):
             k._compiled_pattern,
             ['&', [['=~', 'f', 'hi_compiled'], ['=~', 'f', 'hello_compiled']]])
 
-    @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x: '{0}_compiled'.format(x))
+    @patch('kmatch.kmatch.re.compile', spec_set=True, side_effect=lambda x, flags: '{0}_compiled'.format(x))
     def test_triply_nested_list_of_dicts(self, mock_compile):
         k = K(['&', [
             ['=~', 'f', 'hi'],
