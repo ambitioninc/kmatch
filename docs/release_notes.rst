@@ -1,6 +1,11 @@
 Release Notes
 =============
 
+v0.3.0
+------
+* Add support for python 3.7
+* Remove support for python 3.3 and 3.4
+
 v0.2.1
 ------
 * Use property and setter for suppress exceptions
