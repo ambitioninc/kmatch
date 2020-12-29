@@ -1,6 +1,11 @@
 Release Notes
 =============
 
+v0.4.0
+------
+* Add support for python 3.8
+* Drop python 2.7
+
 v0.3.0
 ------
 * Add support for python 3.7
