@@ -4,11 +4,11 @@
 .. image:: https://coveralls.io/repos/ambitioninc/kmatch/badge.png?branch=develop
     :target: https://coveralls.io/r/ambitioninc/kmatch?branch=develop
 
-.. image:: https://pypip.in/v/kmatch/badge.png
+.. image:: https://img.shields.io/pypi/v/kmatch.svg
     :target: https://crate.io/packages/kmatch/
     :alt: Latest PyPI version
 
-.. image:: https://pypip.in/d/kmatch/badge.png
+.. image:: https://img.shields.io/pypi/dm/kmatch.svg
     :target: https://crate.io/packages/kmatch/
     :alt: Number of PyPI downloads
 
