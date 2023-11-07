@@ -4,6 +4,19 @@ from mock import patch
 
 from kmatch import K
 
+class ExtentedTestCase(TestCase):
+    """
+    Assertions helpers that strictly follows Python AssertIs recommendations for booleans strict checking.
+    From https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertTrue:
+        'Note that this is equivalent to bool(expr) is True and not to expr is True (use assertIs(expr, True) for the latter).'
+    """
+    
+    def assertIsTrue(self, value):
+        self.assertIs(value, True)
+
+    def assertIsFalse(self, value):
+        self.assertIs(value, False)
+
 
 class KPatternTest(TestCase):
     """
@@ -14,97 +27,97 @@ class KPatternTest(TestCase):
         self.assertEquals(k.pattern, ['=~', 'hi', 'hi'])
 
 
-class KMatchTest(TestCase):
+class KMatchTest(ExtentedTestCase):
     """
     Tests the match function in K.
     """
     def test_basic_lte_true(self):
-        self.assertTrue(K(['<=', 'f', 0]).match({'f': -1}))
+        self.assertIsTrue(K(['<=', 'f', 0]).match({'f': -1}))
 
     def test_basic_lte_false(self):
-        self.assertFalse(K(['<=', 'f', 0]).match({'f': 1}))
+        self.assertIsFalse(K(['<=', 'f', 0]).match({'f': 1}))
 
     def test_basic_lte_non_extant(self):
         with self.assertRaises(KeyError):
-            self.assertFalse(K(['<=', 'f', 0]).match({}))
+            self.assertIsFalse(K(['<=', 'f', 0]).match({}))
 
     def test_basic_lt_non_extant(self):
         with self.assertRaises(KeyError):
-            self.assertFalse(K(['<', 'f', 0]).match({}))
+            self.assertIsFalse(K(['<', 'f', 0]).match({}))
 
     def test_basic_eq_true(self):
-        self.assertTrue(K(['==', 'f', 0]).match({'f': 0}))
+        self.assertIsTrue(K(['==', 'f', 0]).match({'f': 0}))
 
     def test_basic_eq_false(self):
-        self.assertFalse(K(['==', 'f', 0]).match({'f': 1}))
+        self.assertIsFalse(K(['==', 'f', 0]).match({'f': 1}))
 
     def test_basic_eq_non_extant(self):
         with self.assertRaises(KeyError):
-            self.assertFalse(K(['==', 'f', 0]).match({}))
+            self.assertIsFalse(K(['==', 'f', 0]).match({}))
 
     def test_basic_gte_true(self):
-        self.assertTrue(K(['>=', 'f', 0]).match({'f': 0}))
+        self.assertIsTrue(K(['>=', 'f', 0]).match({'f': 0}))
 
     def test_basic_gte_false(self):
-        self.assertFalse(K(['>=', 'f', 0]).match({'f': -1}))
+        self.assertIsFalse(K(['>=', 'f', 0]).match({'f': -1}))
 
     def test_basic_gte_non_extant(self):
         with self.assertRaises(KeyError):
-            self.assertFalse(K(['>=', 'f', 0]).match({}))
+            self.assertIsFalse(K(['>=', 'f', 0]).match({}))
 
     def test_basic_gt_non_extant(self):
         with self.assertRaises(KeyError):
-            self.assertFalse(K(['>', 'f', 0]).match({}))
+            self.assertIsFalse(K(['>', 'f', 0]).match({}))
 
     def test_null_regex_match_false(self):
-        self.assertFalse(K(['=~', 'f', '^hi$']).match({'f': None}))
+        self.assertIsFalse(K(['=~', 'f', '^hi$']).match({'f': None}))
 
     def test_basic_regex_true(self):
-        self.assertTrue(K(['=~', 'f', '^hi$']).match({'f': 'hi'}))
+        self.assertIsTrue(K(['=~', 'f', '^hi$']).match({'f': 'hi'}))
 
     def test_multiline_regex_true(self):
-        self.assertTrue(K(['=~', 'f', '.*hi.*']).match({'f': 'foo\nhi'}))
+        self.assertIsTrue(K(['=~', 'f', '.*hi.*']).match({'f': 'foo\nhi'}))
 
     def test_basic_regex_false(self):
-        self.assertFalse(K(['=~', 'f', '^hi$']).match({'f': ' hi'}))
+        self.assertIsFalse(K(['=~', 'f', '^hi$']).match({'f': ' hi'}))
 
     def test_basic_regex_non_extant(self):
         with self.assertRaises(KeyError):
-            self.assertFalse(K(['=~', 'f', '^hi$']).match({}))
+            self.assertIsFalse(K(['=~', 'f', '^hi$']).match({}))
 
     def test_basic_equals_non_extant(self):
         with self.assertRaises(KeyError):
-            self.assertTrue(K(['==', 'f', None]).match({}))
+            self.assertIsTrue(K(['==', 'f', None]).match({}))
 
     def test_basic_not_equals_non_extant(self):
         with self.assertRaises(KeyError):
-            self.assertFalse(K(['!=', 'f', None]).match({}))
+            self.assertIsFalse(K(['!=', 'f', None]).match({}))
 
     def test_basic_existence_true(self):
-        self.assertTrue(K(['?', 'k']).match({'k': 'val'}))
+        self.assertIsTrue(K(['?', 'k']).match({'k': 'val'}))
 
     def test_basic_existence_false(self):
-        self.assertFalse(K(['?', 'k']).match({'k1': 'val'}))
+        self.assertIsFalse(K(['?', 'k']).match({'k1': 'val'}))
 
     def test_basic_nonexistence_true(self):
-        self.assertTrue(K(['!?', 'k']).match({'k1': 'val'}))
+        self.assertIsTrue(K(['!?', 'k']).match({'k1': 'val'}))
 
     def test_basic_nonexistence_false(self):
-        self.assertFalse(K(['!?', 'k']).match({'k': 'val'}))
+        self.assertIsFalse(K(['!?', 'k']).match({'k': 'val'}))
 
     def test_basic_suppress_key_errors(self):
-        self.assertFalse(K(['==', 'k', 3], suppress_key_errors=True).match({}))
+        self.assertIsFalse(K(['==', 'k', 3], suppress_key_errors=True).match({}))
 
     def test_basic_suppress_exceptions(self):
-        self.assertFalse(K(['==', 'k', 3], suppress_exceptions=True).match({}))
+        self.assertIsFalse(K(['==', 'k', 3], suppress_exceptions=True).match({}))
 
     def test_not_field_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '!', ['>=', 'f', 3],
         ]).match({'f': 1}))
 
     def test_compound_suppress_key_errors_gte_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '|', [
                 ['==', 'f1', 5],
                 ['>', 'f', 5],
@@ -112,7 +125,7 @@ class KMatchTest(TestCase):
         ], suppress_key_errors=True).match({'f': 6}))
 
     def test_compound_suppress_exceptions_gte_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '|', [
                 ['==', 'f1', 5],
                 ['>', 'f', 5],
@@ -131,19 +144,19 @@ class KMatchTest(TestCase):
                     K(['>=', 'k', 3]).match({'k': None})
                 with self.assertRaises(TypeError):
                     K(['>=', 'k', 3]).match({'k': ''})
-                self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': None}))
-                self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': ''}))
+                self.assertIsFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': None}))
+                self.assertIsFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': ''}))
 
         if version[0] == '3':  # pragma: no cover
             with self.assertRaises(TypeError):
                 K(['>=', 'k', 3]).match({'k': None})
             with self.assertRaises(TypeError):
                 K(['>=', 'k', 3]).match({'k': ''})
-            self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': None}))
-            self.assertFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': ''}))
+            self.assertIsFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': None}))
+            self.assertIsFalse(K(['>=', 'k', 3], suppress_exceptions=True).match({'k': ''}))
 
     def test_compound_existence_gte_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '&', [
                 ['?', 'f'],
                 ['>', 'f', 5],
@@ -151,7 +164,7 @@ class KMatchTest(TestCase):
         ]).match({'f': 6}))
 
     def test_compound_and_lte_gte_single_field_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '&', [
                 ['>=', 'f', 3],
                 ['<=', 'f', 7],
@@ -159,7 +172,7 @@ class KMatchTest(TestCase):
         ]).match({'f': 5}))
 
     def test_compound_and_lte_gte_double_field_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '&', [
                 ['>=', 'f1', 3],
                 ['<=', 'f2', 7],
@@ -167,7 +180,7 @@ class KMatchTest(TestCase):
         ]).match({'f1': 5, 'f2': 0}))
 
     def test_compound_or_regex_double_field_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '|', [
                 ['=~', 'f1', '^Email$'],
                 ['=~', 'f2', '^Call$'],
@@ -175,7 +188,7 @@ class KMatchTest(TestCase):
         ]).match({'f1': 'Email', 'f2': 'Reminder'}))
 
     def test_compound_or_regex_double_field_false(self):
-        self.assertFalse(K([
+        self.assertIsFalse(K([
             '|', [
                 ['=~', 'f1', '^Email$'],
                 ['=~', 'f2', '^Call$'],
@@ -183,7 +196,7 @@ class KMatchTest(TestCase):
         ]).match({'f1': 'Emails', 'f2': 'Reminder'}))
 
     def test_nested_compound_or_and_regex_double_field_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '&', [
                 ['>=', 'f2', 10], [
                     '|', [
@@ -195,7 +208,7 @@ class KMatchTest(TestCase):
         ]).match({'f1': 'Email', 'f2': 20}))
 
     def test_nested_compound_or_and_regex_double_field_false(self):
-        self.assertFalse(K([
+        self.assertIsFalse(K([
             '&', [
                 ['>=', 'f2', 10], [
                     '|', [
@@ -207,7 +220,7 @@ class KMatchTest(TestCase):
         ]).match({'f1': 'Email', 'f2': 2}))
 
     def test_two_nested_ors_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '&', [
                 ['|', [
                     ['=~', 'f1', '^Email$'],
@@ -221,7 +234,7 @@ class KMatchTest(TestCase):
         ]).match({'f1': 'Call', 'f2': 5, 'f3': 2}))
 
     def test_two_nested_ors_false(self):
-        self.assertFalse(K([
+        self.assertIsFalse(K([
             '&', [
                 ['|', [
                     ['=~', 'f1', '^Email$'],
@@ -232,7 +245,7 @@ class KMatchTest(TestCase):
         ]).match({'f1': 'Call', 'f2': 4}))
 
     def test_string_choice_or_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '|', [
                 ['==', 'f1', 'Email'],
                 ['==', 'f1', 'Call'],
@@ -241,13 +254,13 @@ class KMatchTest(TestCase):
         ]).match({'f1': 'Task', 'f2': 2}))
 
     def test_xor_true(self):
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '^', [
                 ['?', 'email'],
                 ['?', 'e-mail']
             ]
         ]).match({'email': 'opensource@ambition.com'}))
-        self.assertTrue(K([
+        self.assertIsTrue(K([
             '^', [
                 ['?', 'email'],
                 ['?', 'e-mail']
@@ -255,7 +268,7 @@ class KMatchTest(TestCase):
         ]).match({'e-mail': 'opensource@ambition.com'}))
 
     def test_xor_false(self):
-        self.assertFalse(K([
+        self.assertIsFalse(K([
             '^', [
                 ['?', 'email'],
                 ['?', 'e-mail']
@@ -297,9 +310,9 @@ class KMatchTest(TestCase):
 
     def test_properties(self):
         k = K(['<=', 'f', 0])
-        self.assertFalse(k.suppress_exceptions)
+        self.assertIsFalse(k.suppress_exceptions)
         k.suppress_exceptions = True
-        self.assertTrue(k.suppress_exceptions)
+        self.assertIsTrue(k.suppress_exceptions)
 
 
 class KInitTest(TestCase):
